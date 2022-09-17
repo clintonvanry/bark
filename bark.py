@@ -84,6 +84,7 @@ def loop():  # <1>
         'D': Option('Delete a bookmark', commands.DeleteBookmarkCommand(), prep_call=get_bookmark_id_for_deletion),
         'Q': Option('Quit', commands.QuitCommand()),
     })
+
     print_options(options)
 
     chosen_option = get_option_choice(options)
