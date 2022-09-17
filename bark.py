@@ -87,6 +87,7 @@ def loop():  # <1>
 
     print_options(options)
 
+
     chosen_option = get_option_choice(options)
     clear_screen()
     chosen_option.choose()
