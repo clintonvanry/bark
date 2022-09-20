@@ -73,6 +73,24 @@ def get_new_bookmark_data():  # <4>
 def get_bookmark_id_for_deletion():  # <6>
     return get_user_input('Enter a bookmark ID to delete')
 
+def get_github_import_options():
+    return {
+        'github_username': get_user_input('GitHub username'),
+        'preserve_timestamps':
+            get_user_input(
+                'Preserve timestamps [Y/n]',
+                required=False
+            ) in {'Y', 'y', None},
+    }
+
+def get_new_bookmark_info():
+    bookmark_id = get_user_input('Enter a bookmark ID to edit')
+    field = get_user_input('Choose a value to edit (title, URL, notes)')
+    new_value = get_user_input(f'Enter the new value for {field}')
+    return {
+        'id': bookmark_id,
+        'update': {field: new_value},
+    }
 
 def loop():  # <1>
     clear_screen()
@@ -81,7 +99,9 @@ def loop():  # <1>
         'A': Option('Add a bookmark', commands.AddBookmarkCommand(), prep_call=get_new_bookmark_data),
         'B': Option('List bookmarks by date', commands.ListBookmarksCommand()),
         'T': Option('List bookmarks by title', commands.ListBookmarksCommand(order_by='title')),
+        'E': Option('Edit a bookmark', commands.EditBookmarkCommand(), prep_call=get_new_bookmark_info),
         'D': Option('Delete a bookmark', commands.DeleteBookmarkCommand(), prep_call=get_bookmark_id_for_deletion),
+        'G': Option('Import GitHub stars', commands.ImportGitHubStarCommand(), prep_call=get_github_import_options),
         'Q': Option('Quit', commands.QuitCommand()),
     })
 
@@ -94,16 +114,6 @@ def loop():  # <1>
 
     _ = input('Press ENTER to return to menu')  # <2>
 
-
-def for_listings_only():
-    options = {
-        'A': Option('Add a bookmark', commands.AddBookmarkCommand()),
-        'B': Option('List bookmarks by date', commands.ListBookmarksCommand()),
-        'T': Option('List bookmarks by title', commands.ListBookmarksCommand(order_by='title')),
-        'D': Option('Delete a bookmark', commands.DeleteBookmarkCommand()),
-        'Q': Option('Quit', commands.QuitCommand()),
-    }
-    print_options(options)
 
 
 if __name__ == '__main__':
